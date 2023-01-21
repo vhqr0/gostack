@@ -1,0 +1,33 @@
+{
+  "Host": {
+    "Verbose": true,
+    "Forward": true,
+    "Ifaces": [
+      {
+        "Name": "eth0",
+        "MTU": 1500,
+        "MAC": "",
+        "CIDR4": "10.0.0.1/24",
+        "CIDR6": "2000::1/64",
+        "Typ": "tap",
+        "Args": { "Name": "tap0" }
+      },
+      {
+        "Name": "eth1",
+        "MTU": 1280,
+        "MAC": "",
+        "CIDR4": "10.0.1.1/24",
+        "CIDR6": "2001::1/64",
+        "Typ": "udp",
+        "Args": { "Local": "localhost:1081", "Peer": "localhost:1082" }
+      }
+    ]
+  },
+  "Route": {
+    "AutoRoute": true,
+    "Entries": [
+      { "Ver": 4, "Iface": "eth0", "Peer": "10.0.0.2", "Net": "" },
+      { "Ver": 6, "Iface": "eth1", "Peer": "2001::2", "Net": "" }
+    ]
+  }
+}
