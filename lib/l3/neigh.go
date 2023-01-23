@@ -9,6 +9,11 @@ import (
 	"github.com/vhqr0/gostack/lib/util"
 )
 
+const (
+	NeighWaitMSecs = 10
+	NeighValidSecs = 60
+)
+
 type NeighTable struct {
 	Mutex   sync.RWMutex
 	Entries map[string]*NeighEntry
@@ -36,7 +41,7 @@ func (table *NeighTable) Update(key string, mac net.HardwareAddr) {
 func (table *NeighTable) Lookup(key string) (mac net.HardwareAddr) {
 	table.Mutex.RLock()
 	entry, ok := table.Entries[key]
-	if ok && entry != nil && entry.TS+60 > time.Now().Unix() {
+	if ok && entry != nil && entry.TS+NeighValidSecs > time.Now().Unix() {
 		mac = entry.MAC
 	}
 	table.Mutex.RUnlock()
@@ -59,7 +64,7 @@ func (stack *IPStack) Lookup(ifidx int, peer net.IP) net.HardwareAddr {
 		log.Panic(&util.InvalidIPLen{Len: len(peer)})
 	}
 
-	time.Sleep(10 * time.Millisecond)
+	time.Sleep(NeighWaitMSecs * time.Millisecond)
 
 	return stack.NeighTable.Lookup(key)
 }
