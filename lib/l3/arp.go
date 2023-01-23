@@ -59,7 +59,7 @@ func (stack *IPStack) arpReceiver() {
 			stack.arpRepRecv(pkt)
 		default:
 			if stack.Verbose {
-				log.Printf("arp recv: drop(op)")
+				log.Print("arp recv: drop(op)")
 			}
 		}
 	}

@@ -4,6 +4,10 @@ import (
 	"net"
 )
 
+func init() {
+	RegisterIfaceAdaptor("udp", NewUDPIfaceAdaptor)
+}
+
 func NewUDPIfaceAdaptor(args map[string]string) (IfaceAdaptor, error) {
 	localStr, err := IfaceAdaptorRequireArg("Local", args)
 	if err != nil {
@@ -24,8 +28,4 @@ func NewUDPIfaceAdaptor(args map[string]string) (IfaceAdaptor, error) {
 	}
 
 	return net.DialUDP("udp", local, peer)
-}
-
-func init() {
-	RegisterIfaceAdaptor("udp", NewUDPIfaceAdaptor)
 }

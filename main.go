@@ -6,13 +6,17 @@ import (
 	"log"
 	"os"
 
+	"net/http"
+
 	"github.com/vhqr0/gostack/lib/conf"
+	"github.com/vhqr0/gostack/lib/monitor"
 
 	_ "github.com/vhqr0/gostack/lib/util"
 )
 
 var (
-	confFile = flag.String("c", "config.json", "config file")
+	confFile   = flag.String("c", "config.json", "config file name")
+	httpListen = flag.String("http", ":1080", "monitor http listen address")
 )
 
 func main() {
@@ -28,8 +32,8 @@ func main() {
 	var stackConf = conf.StackConf{}
 	stackConf.Unmarshal(buf)
 	vstack := stackConf.NewStack()
-
 	vstack.Run()
-	ch := make(chan struct{})
-	<-ch
+
+	m := &monitor.Monitor{Stack: vstack}
+	log.Fatal(http.ListenAndServe(*httpListen, m))
 }

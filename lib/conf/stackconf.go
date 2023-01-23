@@ -11,6 +11,14 @@ type StackConf struct {
 	Route *RouteConf
 }
 
+func (conf *StackConf) Marshal() ([]byte, error) {
+	return json.Marshal(conf)
+}
+
+func (conf *StackConf) Unmarshal(data []byte) error {
+	return json.Unmarshal(data, conf)
+}
+
 func (conf *StackConf) NewStack() *stack.Stack {
 	vhost := conf.Host.NewHost()
 	vstack := stack.NewStack(vhost)
@@ -18,10 +26,13 @@ func (conf *StackConf) NewStack() *stack.Stack {
 	return vstack
 }
 
-func (conf *StackConf) Marshal() ([]byte, error) {
-	return json.Marshal(conf)
-}
-
-func (conf *StackConf) Unmarshal(data []byte) error {
-	return json.Unmarshal(data, conf)
+func ConfFromStack(vstack *stack.Stack) *StackConf {
+	conf := &StackConf{
+		Host: ConfFromHost(vstack.Host),
+		Route: ConfFromRouteTable(
+			vstack,
+			vstack.IPStack.Route4Table,
+			vstack.IPStack.Route6Table),
+	}
+	return conf
 }

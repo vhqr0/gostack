@@ -107,6 +107,14 @@ func ParseCIDR6(cidr string) (net.IP, *net.IPNet, error) {
 	return ip, ipnet, nil
 }
 
+func CIDRString(ip net.IP, ipnet *net.IPNet) string {
+	cidr := &net.IPNet{
+		IP: ip,
+		Mask: ipnet.Mask,
+	}
+	return cidr.String()
+}
+
 func SolIP(ip net.IP) net.IP {
 	sip := make([]byte, 16)
 	copy(sip[:13], SolIPPrefix)

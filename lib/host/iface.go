@@ -15,6 +15,9 @@ type Iface struct {
 	Net4 *net.IPNet
 	Net6 *net.IPNet
 
+	Typ  string
+	Args map[string]string
+
 	adaptor IfaceAdaptor
 }
 
@@ -56,6 +59,9 @@ func NewIface(name, cidr4, cidr6, typ string, args map[string]string) (*Iface, e
 		IP6:  ip6,
 		Net4: net4,
 		Net6: net6,
+
+		Typ: typ,
+		Args: args,
 
 		adaptor: adaptor,
 	}
