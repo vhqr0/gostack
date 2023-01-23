@@ -20,6 +20,8 @@ var (
 )
 
 func main() {
+	flag.Parse()
+
 	file, err := os.Open(*confFile)
 	if err != nil {
 		log.Fatal(err)
