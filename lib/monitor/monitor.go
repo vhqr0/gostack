@@ -23,6 +23,7 @@ func (m *Monitor) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		handler(m, w, r)
 	} else {
 		log.Printf("monitor drop " + path)
+		w.WriteHeader(http.StatusNotFound)
 	}
 }
 

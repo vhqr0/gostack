@@ -13,9 +13,10 @@ func init() {
 
 func handleConf(m *Monitor, w http.ResponseWriter, r *http.Request) {
 	stackConf := conf.ConfFromStack(m.Stack)
-	buf, err := stackConf.Marshal()
-	if err != nil {
+	if buf, err := stackConf.Marshal(); err != nil {
 		log.Printf("monitor[conf] error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+	} else {
+		w.Write(buf)
 	}
-	w.Write(buf)
 }
