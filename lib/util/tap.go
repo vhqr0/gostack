@@ -8,5 +8,5 @@ import (
 )
 
 func OpenTAP(ifaceName string) (*os.File, error) {
-	return nil, UnsupportedFeature{Feature: "tap"}
+	return nil, FeatUnsupported{Feat: "tap"}
 }

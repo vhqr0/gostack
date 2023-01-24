@@ -19,7 +19,7 @@ func CheckSum(msg []byte) uint16 {
 	return ^uint16(sum)
 }
 
-func CheckSum4(msg []byte, src, dst net.IP, proto uint8) uint16 {
+func Inet4CheckSum(msg []byte, src, dst net.IP, proto uint8) uint16 {
 	msgLen := len(msg)
 	buf := make([]byte, 12+msgLen)
 	copy(buf[:4], src)                                    // src
@@ -30,13 +30,13 @@ func CheckSum4(msg []byte, src, dst net.IP, proto uint8) uint16 {
 	return CheckSum(buf)
 }
 
-func CheckSum6(msg []byte, src, dst net.IP, proto uint8) uint16 {
+func Inet6CheckSum(msg []byte, src, dst net.IP, proto uint8) uint16 {
 	msgLen := len(msg)
 	buf := make([]byte, 36+msgLen)
 	copy(buf[:16], src)                                    // src
 	copy(buf[16:32], dst)                                  // dst
 	binary.BigEndian.PutUint16(buf[32:34], uint16(msgLen)) // plen
-	binary.BigEndian.PutUint16(buf[34:46], uint16(proto))  // proto
+	binary.BigEndian.PutUint16(buf[34:36], uint16(proto))  // proto
 	copy(buf[36:], msg)
 	return CheckSum(buf)
 }

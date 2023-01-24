@@ -4,8 +4,6 @@ import (
 	"encoding/binary"
 	"log"
 	"net"
-
-	"github.com/vhqr0/gostack/lib/util"
 )
 
 func NeighKey(ifidx int, ip net.IP) (key string) {
@@ -15,7 +13,7 @@ func NeighKey(ifidx int, ip net.IP) (key string) {
 	case 16:
 		key = Neigh6Key(ifidx, ip)
 	default:
-		log.Panic(&util.InvalidIPLen{Len: len(ip)})
+		log.Panic(&InvalidIPLen{Len: len(ip)})
 	}
 	return
 }

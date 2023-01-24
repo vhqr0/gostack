@@ -5,28 +5,28 @@ import (
 )
 
 var (
-	ifaceAdaptorCreatorMap map[string]IfaceAdaptorCreator = make(map[string]IfaceAdaptorCreator)
+	adaptorCreatorMap map[string]AdaptorCreator = make(map[string]AdaptorCreator)
 )
 
 type (
-	IfaceAdaptor        io.ReadWriteCloser
-	IfaceAdaptorCreator func(map[string]string) (IfaceAdaptor, error)
+	Adaptor        io.ReadWriteCloser
+	AdaptorCreator func(map[string]string) (Adaptor, error)
 )
 
-func RegisterIfaceAdaptor(typ string, creator IfaceAdaptorCreator) {
-	ifaceAdaptorCreatorMap[typ] = creator
+func RegisterAdaptor(typ string, creator AdaptorCreator) {
+	adaptorCreatorMap[typ] = creator
 }
 
-func NewIfaceAdaptor(typ string, args map[string]string) (IfaceAdaptor, error) {
-	if creator, ok := ifaceAdaptorCreatorMap[typ]; ok {
+func NewAdaptor(typ string, args map[string]string) (Adaptor, error) {
+	if creator, ok := adaptorCreatorMap[typ]; ok {
 		return creator(args)
 	}
-	return nil, &InvalidIfaceAdaptorTyp{Typ: typ}
+	return nil, &InvalidAdaptorTyp{Typ: typ}
 }
 
-func IfaceAdaptorRequireArg(arg string, args map[string]string) (string, error) {
+func AdaptorRequireArg(arg string, args map[string]string) (string, error) {
 	if v, ok := args[arg]; ok {
 		return v, nil
 	}
-	return "", &RequiredIfaceAdaptorArg{Arg: arg}
+	return "", &RequiredAdaptorArg{Arg: arg}
 }

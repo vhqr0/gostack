@@ -3,7 +3,6 @@ package l3
 import (
 	"encoding/binary"
 	"log"
-	"math/rand"
 	"net"
 
 	"github.com/vhqr0/gostack/lib/l2"
@@ -121,14 +120,14 @@ func (stack *IPStack) ip4Send(pkt *IPPkt) error {
 	}
 
 	buf := make([]byte, tlen)
-	buf[0] = 0x45                                               // magic
-	binary.BigEndian.PutUint16(buf[2:4], uint16(tlen))          // tlen
-	binary.BigEndian.PutUint16(buf[4:6], uint16(rand.Uint32())) // id
-	buf[8] = 0xff                                               // ttl
-	buf[9] = proto                                              // proto
-	copy(buf[12:16], local)                                     // src
-	copy(buf[16:20], peer)                                      // dst
-	copy(buf[20:], payload)                                     // payload
+	buf[0] = 0x45                                           // magic
+	binary.BigEndian.PutUint16(buf[2:4], uint16(tlen))      // tlen
+	binary.BigEndian.PutUint16(buf[4:6], util.RandUint16()) // id
+	buf[8] = 0xff                                           // ttl
+	buf[9] = proto                                          // proto
+	copy(buf[12:16], local)                                 // src
+	copy(buf[16:20], peer)                                  // dst
+	copy(buf[20:], payload)                                 // payload
 	cksum := util.CheckSum(buf)
 	binary.BigEndian.PutUint16(buf[10:12], cksum)
 

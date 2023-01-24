@@ -101,7 +101,7 @@ func (stack *IPStack) ndpNSRecv(pkt *IPPkt) {
 	buf[64] = NdpOptTgt         // opttyp
 	buf[65] = 1                 // optlen
 	copy(buf[66:72], iface.MAC) // tgtmac
-	cksum := util.CheckSum6(buf[40:72], query, peer, IPICMP6)
+	cksum := util.Inet6CheckSum(buf[40:72], query, peer, IPICMP6)
 	binary.BigEndian.PutUint16(buf[42:44], cksum)
 
 	ethPkt := &l2.EthPkt{
@@ -148,7 +148,7 @@ func (stack *IPStack) ndpNSSend(ifidx int, peer net.IP) {
 
 	iface := stack.EthStack.Host.Ifaces[ifidx]
 
-	sol := util.SolIP(peer)
+	sol := SolIP(peer)
 
 	buf := make([]byte, 40+32)
 	buf[0] = 0x60               // ver
@@ -162,12 +162,12 @@ func (stack *IPStack) ndpNSSend(ifidx int, peer net.IP) {
 	buf[64] = NdpOptSrc         // opttyp
 	buf[65] = 1                 // optlen
 	copy(buf[66:72], iface.MAC) // srcmac
-	cksum := util.CheckSum6(buf[40:72], iface.IP6, sol, IPICMP6)
+	cksum := util.Inet6CheckSum(buf[40:72], iface.IP6, sol, IPICMP6)
 	binary.BigEndian.PutUint16(buf[42:44], cksum)
 
 	pkt := &l2.EthPkt{
 		IfIdx:   ifidx,
-		Peer:    util.SolMAC(peer),
+		Peer:    l2.SolMAC(peer),
 		Proto:   l2.EthIP6,
 		Payload: buf,
 	}

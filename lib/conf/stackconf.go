@@ -2,6 +2,9 @@ package conf
 
 import (
 	"encoding/json"
+	"io"
+	"log"
+	"os"
 
 	"github.com/vhqr0/gostack/lib/stack"
 )
@@ -26,13 +29,27 @@ func (conf *StackConf) NewStack() *stack.Stack {
 	return vstack
 }
 
-func ConfFromStack(vstack *stack.Stack) *StackConf {
+func StackConfFrom(vstack *stack.Stack) *StackConf {
 	conf := &StackConf{
-		Host: ConfFromHost(vstack.Host),
-		Route: ConfFromRouteTable(
-			vstack,
-			vstack.IPStack.Route4Table,
-			vstack.IPStack.Route6Table),
+		Host:  HostConfFrom(vstack.Host),
+		Route: RouteConfFrom(vstack),
 	}
 	return conf
+}
+
+func StackFromFile(fileName string) *stack.Stack {
+	file, err := os.Open(*&fileName)
+	if err != nil {
+		log.Panic(err)
+	}
+	data, err := io.ReadAll(file)
+	if err != nil {
+		log.Panic(err)
+	}
+	stackConf := &StackConf{}
+	if err := stackConf.Unmarshal(data); err != nil {
+		log.Panic(err)
+	}
+	vstack := stackConf.NewStack()
+	return vstack
 }

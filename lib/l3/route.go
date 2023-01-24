@@ -4,7 +4,7 @@ import (
 	"log"
 	"net"
 
-	"github.com/vhqr0/gostack/lib/util"
+	"github.com/vhqr0/gostack/lib/host"
 )
 
 type RouteTable struct {
@@ -37,7 +37,7 @@ func (stack *IPStack) Next(peer net.IP) (entry *RouteEntry) {
 	case 16:
 		entry = stack.Route6Table.Next(peer)
 	default:
-		log.Panic(&util.InvalidIPLen{Len: len(peer)})
+		log.Panic(&InvalidIPLen{Len: len(peer)})
 	}
 	return
 }
@@ -61,21 +61,21 @@ func (stack *IPStack) AddRoute(ver int, ifname, peerStr, netStr string) error {
 	ifidx := stack.EthStack.Host.GetIfaceByName(ifname)
 
 	if ifidx < 0 {
-		return &util.InvalidIfaceName{Name: ifname}
+		return &host.InvalidIfaceName{Name: ifname}
 	}
 
 	if peerStr != "" { // have peer
-		if peer, err = util.ParseIP(ver, peerStr); err != nil {
+		if peer, err = ParseIP(ver, peerStr); err != nil {
 			return err
 		}
 	}
 
 	if netStr != "" { // have net
-		if _, ipnet, err = util.ParseCIDR(ver, netStr); err != nil {
+		if _, ipnet, err = ParseCIDR(ver, netStr); err != nil {
 			return err
 		}
 	} else { // use all ip net (gateway)
-		if ipnet, err = util.AllIPNet(ver); err != nil {
+		if ipnet, err = AllIPNet(ver); err != nil {
 			return err
 		}
 	}
@@ -92,7 +92,7 @@ func (stack *IPStack) AddRoute(ver int, ifname, peerStr, netStr string) error {
 	case 6:
 		stack.Route6Table.Add(entry)
 	default:
-		return &util.InvalidIPVer{Ver: ver}
+		return &InvalidIPVer{Ver: ver}
 	}
 
 	return nil

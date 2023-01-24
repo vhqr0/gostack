@@ -5,11 +5,11 @@ import (
 )
 
 func init() {
-	RegisterIfaceAdaptor("tap", NewTAPIfaceAdaptor)
+	RegisterAdaptor("tap", NewTAPAdaptor)
 }
 
-func NewTAPIfaceAdaptor(args map[string]string) (IfaceAdaptor, error) {
-	if name, err := IfaceAdaptorRequireArg("Name", args); err != nil {
+func NewTAPAdaptor(args map[string]string) (Adaptor, error) {
+	if name, err := AdaptorRequireArg("Name", args); err != nil {
 		return nil, err
 	} else {
 		return util.OpenTAP(name)

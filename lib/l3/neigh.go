@@ -5,8 +5,6 @@ import (
 	"net"
 	"sync"
 	"time"
-
-	"github.com/vhqr0/gostack/lib/util"
 )
 
 const (
@@ -61,7 +59,7 @@ func (stack *IPStack) Lookup(ifidx int, peer net.IP) net.HardwareAddr {
 	case 16:
 		stack.ndpNSSend(ifidx, peer)
 	default:
-		log.Panic(&util.InvalidIPLen{Len: len(peer)})
+		log.Panic(&InvalidIPLen{Len: len(peer)})
 	}
 
 	time.Sleep(NeighWaitMSecs * time.Millisecond)

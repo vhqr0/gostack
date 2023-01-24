@@ -10,7 +10,6 @@ import (
 
 	"github.com/vhqr0/gostack/lib/l3"
 	"github.com/vhqr0/gostack/lib/stack"
-	"github.com/vhqr0/gostack/lib/util"
 )
 
 type NeighTableSer struct {
@@ -48,7 +47,7 @@ func marshalNeighTable(vstack *stack.Stack) ([]byte, error) {
 		mac := v.MAC
 		ts := v.TS
 		if len(ip) != 4 && len(ip) != 16 {
-			return nil, &util.InvalidIPLen{Len: len(ip)}
+			return nil, &l3.InvalidIPLen{Len: len(ip)}
 		}
 		entrySer := &NeighEntrySer{
 			Iface: vstack.Host.Ifaces[ifidx].Name,

@@ -7,7 +7,6 @@ import (
 	"net"
 
 	"github.com/vhqr0/gostack/lib/l2"
-	"github.com/vhqr0/gostack/lib/util"
 )
 
 const (
@@ -141,7 +140,7 @@ func (stack *IPStack) arpReqSend(ifidx int, peer net.IP) {
 
 	pkt := &l2.EthPkt{
 		IfIdx:   ifidx,
-		Peer:    util.BrdMAC,
+		Peer:    l2.BrdMAC,
 		Proto:   l2.EthARP,
 		Payload: payload,
 	}

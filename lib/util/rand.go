@@ -17,3 +17,7 @@ func RandBytes(length int) (bytes []byte) {
 	}
 	return
 }
+
+func RandUint16() uint16 {
+	return uint16(rand.Uint32())
+}

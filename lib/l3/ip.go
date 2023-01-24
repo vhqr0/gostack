@@ -41,7 +41,7 @@ func (stack *IPStack) IPSend(pkt *IPPkt) error { // Notice: block, return error,
 	// restrict:
 	// peer: loopback or global unicast
 
-	if stack.isInStack(peer) { // capture loopback
+	if stack.IsInStack(peer) { // capture loopback
 		if stack.Verbose {
 			log.Printf("ip send: loopback %v => %v", local, peer)
 		}
@@ -79,7 +79,7 @@ func (stack *IPStack) IPSend(pkt *IPPkt) error { // Notice: block, return error,
 		case 16:
 			local = iface.IP6
 		default:
-			log.Panic(&util.InvalidIPLen{Len: len(peer)})
+			log.Panic(&InvalidIPLen{Len: len(peer)})
 		}
 	}
 
@@ -106,7 +106,7 @@ func (stack *IPStack) IPSend(pkt *IPPkt) error { // Notice: block, return error,
 	case 16:
 		return stack.ip6Send(pkt)
 	default:
-		log.Panic(&util.InvalidIPLen{Len: len(peer)})
+		log.Panic(&InvalidIPLen{Len: len(peer)})
 	}
 
 	return nil
@@ -181,11 +181,11 @@ func (stack *IPStack) ipForward(pkt *l2.EthPkt, dst net.IP) {
 	stack.EthStack.Send(pkt)
 }
 
-func (stack *IPStack) isInStack(ip net.IP) bool {
+func (stack *IPStack) IsInStack(ip net.IP) bool {
 	if ip.IsLoopback() {
 		return true
 	}
-	if ip.IsMulticast() { // ipset contains multicast address
+	if ip.IsMulticast() { // ipset contains multicast ip
 		return false
 	}
 	_, ok := stack.IPSet[string(ip)]

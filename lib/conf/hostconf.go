@@ -21,13 +21,13 @@ func (conf *HostConf) NewHost() *host.Host {
 	return vhost
 }
 
-func ConfFromHost(vhost *host.Host) *HostConf {
+func HostConfFrom(vhost *host.Host) *HostConf {
 	conf := &HostConf{
 		Verbose: vhost.Verbose,
 		Forward: vhost.Forward,
 	}
 	for _, iface := range vhost.Ifaces {
-		conf.Ifaces = append(conf.Ifaces, ConfFromIface(iface))
+		conf.Ifaces = append(conf.Ifaces, IfaceConfFrom(iface))
 	}
 	return conf
 }

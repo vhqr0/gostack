@@ -5,15 +5,15 @@ import (
 )
 
 func init() {
-	RegisterIfaceAdaptor("udp", NewUDPIfaceAdaptor)
+	RegisterAdaptor("udp", NewUDPAdaptor)
 }
 
-func NewUDPIfaceAdaptor(args map[string]string) (IfaceAdaptor, error) {
-	localStr, err := IfaceAdaptorRequireArg("Local", args)
+func NewUDPAdaptor(args map[string]string) (Adaptor, error) {
+	localStr, err := AdaptorRequireArg("Local", args)
 	if err != nil {
 		return nil, err
 	}
-	peerStr, err := IfaceAdaptorRequireArg("Peer", args)
+	peerStr, err := AdaptorRequireArg("Peer", args)
 	if err != nil {
 		return nil, err
 	}

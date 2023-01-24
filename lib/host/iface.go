@@ -18,7 +18,7 @@ type Iface struct {
 	Typ  string
 	Args map[string]string
 
-	adaptor IfaceAdaptor
+	adaptor Adaptor
 }
 
 func (iface *Iface) Read(p []byte) (int, error) {
@@ -34,7 +34,7 @@ func (iface *Iface) Close() error {
 }
 
 func NewIface(name, cidr4, cidr6, typ string, args map[string]string) (*Iface, error) {
-	adaptor, err := NewIfaceAdaptor(typ, args)
+	adaptor, err := NewAdaptor(typ, args)
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +60,7 @@ func NewIface(name, cidr4, cidr6, typ string, args map[string]string) (*Iface, e
 		Net4: net4,
 		Net6: net6,
 
-		Typ: typ,
+		Typ:  typ,
 		Args: args,
 
 		adaptor: adaptor,

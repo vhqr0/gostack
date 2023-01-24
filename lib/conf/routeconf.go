@@ -34,18 +34,19 @@ func (conf *RouteEntryConf) AddRoute(vstack *stack.Stack) {
 	}
 }
 
-func ConfFromRouteTable(vstack *stack.Stack, route4Table, route6Table *l3.RouteTable) *RouteConf {
+func RouteConfFrom(vstack *stack.Stack) *RouteConf {
 	conf := &RouteConf{AutoRoute: false}
-	for _, entry := range route4Table.Entries {
-		conf.Entries = append(conf.Entries, ConfFromRouteEntry(vstack, 4, entry))
+	table4, table6 := vstack.IPStack.Route4Table, vstack.IPStack.Route6Table
+	for _, entry := range table4.Entries {
+		conf.Entries = append(conf.Entries, RouteEntryConfFrom(vstack, 4, entry))
 	}
-	for _, entry := range route6Table.Entries {
-		conf.Entries = append(conf.Entries, ConfFromRouteEntry(vstack, 6, entry))
+	for _, entry := range table6.Entries {
+		conf.Entries = append(conf.Entries, RouteEntryConfFrom(vstack, 6, entry))
 	}
 	return conf
 }
 
-func ConfFromRouteEntry(vstack *stack.Stack, ver int, entry *l3.RouteEntry) *RouteEntryConf {
+func RouteEntryConfFrom(vstack *stack.Stack, ver int, entry *l3.RouteEntry) *RouteEntryConf {
 	var peer, net = "", ""
 	if entry.Peer != nil {
 		peer = entry.Peer.String()

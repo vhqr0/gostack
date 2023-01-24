@@ -1,7 +1,6 @@
 package l3
 
 import (
-	"fmt"
 	"net"
 	"strconv"
 )
@@ -13,13 +12,26 @@ type (
 )
 
 func (err *DstUnreach) Error() string {
-	return fmt.Sprintf("dst unreach: %v", err.Dst)
+	return "dst unreach: " + err.Dst.String()
 }
 
 func (err *HostUnreach) Error() string {
-	return fmt.Sprintf("host unreach: %v", err.Host)
+	return "host unreach: " + err.Host.String()
 }
 
 func (err *PktTooBig) Error() string {
 	return "pkt too big: " + strconv.FormatInt(int64(err.Len), 10)
+}
+
+type (
+	InvalidIPVer struct{ Ver int }
+	InvalidIPLen struct{ Len int }
+)
+
+func (err *InvalidIPVer) Error() string {
+	return "invalid ip ver: " + strconv.FormatInt(int64(err.Ver), 10)
+}
+
+func (err *InvalidIPLen) Error() string {
+	return "invalid ip len: " + strconv.FormatInt(int64(err.Len), 10)
 }

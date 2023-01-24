@@ -36,7 +36,7 @@ func (conf *IfaceConf) NewIface() *host.Iface {
 	return iface
 }
 
-func ConfFromIface(iface *host.Iface) *IfaceConf {
+func IfaceConfFrom(iface *host.Iface) *IfaceConf {
 	conf := &IfaceConf{
 		Name: iface.Name,
 		MTU:  iface.MTU,

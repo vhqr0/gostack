@@ -61,7 +61,7 @@ func (stack *IPStack) icmp6EchoReqRecv(pkt *IPPkt) {
 	payload := pkt.Payload
 	payload[0] = ICMP6EchoRep
 	binary.BigEndian.PutUint16(payload[2:4], 0)
-	cksum := util.CheckSum6(payload, pkt.Local, pkt.Peer, IPICMP6)
+	cksum := util.Inet6CheckSum(payload, pkt.Local, pkt.Peer, IPICMP6)
 	binary.BigEndian.PutUint16(payload[2:4], cksum)
 
 	pkt.IfIdx = -1
