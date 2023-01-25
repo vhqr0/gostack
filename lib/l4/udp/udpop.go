@@ -57,7 +57,7 @@ func (udpSock *UDPSock) WriteTo(p []byte, addr *sock.Addr) (int, error) {
 
 	if local == nil {
 		var err error
-		if local, err = udpSock.Bind(nil); err != nil {
+		if local, err = udpSock.Bind(nil); err != nil { // Notice: relay on Bind to get local safely
 			return 0, err
 		}
 	}
@@ -108,7 +108,9 @@ func (udpSock *UDPSock) Bind(addr *sock.Addr) (*sock.Addr, error) {
 		return nil, &sock.OPOnBusySock{OP: "Bind"}
 	}
 
-	var addrClone *sock.Addr // don't modify origin addr
+	// don't modify addr, and don't let modification of addr affect sock
+	var addrClone *sock.Addr
+
 	if addr != nil {
 		addrClone = &sock.Addr{IP: addr.IP, Port: addr.Port}
 	}
@@ -171,11 +173,18 @@ func (udpSock *UDPSock) Connect(addr *sock.Addr) error {
 		return &sock.OPOnBusySock{OP: "Connect"}
 	}
 
-	if err := udpSock.ValidateAddr(addr); err != nil {
+	// don't let modification of addr affect sock
+	var addrClone *sock.Addr
+
+	if addr != nil {
+		addrClone = &sock.Addr{IP: addr.IP, Port: addr.Port}
+	}
+
+	if err := udpSock.ValidateAddr(addrClone); err != nil {
 		return err
 	}
 
-	udpSock.Peer = addr
+	udpSock.Peer = addrClone
 
 	return nil
 }
