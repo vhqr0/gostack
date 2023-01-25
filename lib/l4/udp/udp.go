@@ -76,7 +76,7 @@ func (stack *UDPStack) udpSend(pkt *UDPPkt) error { // Notice: block. return err
 	binary.BigEndian.PutUint16(buf[2:4], peer.Port)    // dport
 	binary.BigEndian.PutUint16(buf[4:6], uint16(tlen)) // tlen
 	copy(buf[8:], payload)                             // payload
-	cksum := l3.InetCheckSum(payload, local.IP, peer.IP, l3.IPUDP)
+	cksum := l3.InetCheckSum(buf, local.IP, peer.IP, l3.IPUDP)
 	binary.BigEndian.PutUint16(buf[6:8], cksum)
 
 	ippkt := &l3.IPPkt{
