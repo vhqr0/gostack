@@ -39,7 +39,7 @@ func (udpSock *UDPSock) ValidateAddr(addr *sock.Addr) error {
 			return &sock.InvalidSockAddr{Addr: addr}
 		}
 	default:
-		return &sock.InvalidSockFamilyOrTyp{Family: udpSock.Family, Typ: udpSock.Typ}
+		return &sock.InvalidSockArgs{Family: udpSock.Family, Typ: udpSock.Typ}
 	}
 	if !addr.IP.IsLoopback() && !addr.IP.IsGlobalUnicast() {
 		return &sock.InvalidSockAddr{Addr: addr}

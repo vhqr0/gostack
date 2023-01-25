@@ -128,7 +128,8 @@ func (stack *IPStack) ip4Send(pkt *IPPkt) error {
 	copy(buf[12:16], local)                                 // src
 	copy(buf[16:20], peer)                                  // dst
 	copy(buf[20:], payload)                                 // payload
-	cksum := util.CheckSum(buf)
+	// Notice: checksum only ip header
+	cksum := util.CheckSum(buf[:20])
 	binary.BigEndian.PutUint16(buf[10:12], cksum)
 
 	ethPkt := &l2.EthPkt{

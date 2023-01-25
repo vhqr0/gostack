@@ -72,7 +72,7 @@ func (stack *IPStack) IPSend(pkt *IPPkt) error { // Notice: block, return error,
 
 	iface := stack.EthStack.Host.Ifaces[ifidx]
 
-	if local == nil {
+	if local == nil {	// local changed
 		switch len(peer) {
 		case 4:
 			local = iface.IP4
@@ -94,7 +94,8 @@ func (stack *IPStack) IPSend(pkt *IPPkt) error { // Notice: block, return error,
 	pkt.IfIdx = ifidx
 	pkt.PeerMAC = peerMAC
 	pkt.Local = local
-	pkt.Peer = peer
+	// don't change peer
+	// pkt.Peer = peer
 
 	if stack.Verbose {
 		log.Printf("ip send: %v => %v", local, peer)

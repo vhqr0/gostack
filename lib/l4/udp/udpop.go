@@ -133,7 +133,7 @@ func (udpSock *UDPSock) Bind(addr *sock.Addr) (*sock.Addr, error) {
 			addrClone.IP = udpSock.Stack.IPStack.EthStack.Host.Ifaces[0].IP6 // Notice: assume ifaces != nil
 		}
 	default:
-		return nil, &sock.InvalidSockFamilyOrTyp{Family: udpSock.Family, Typ: udpSock.Typ}
+		return nil, &sock.InvalidSockArgs{Family: udpSock.Family, Typ: udpSock.Typ}
 	}
 
 	if !udpSock.Stack.IPStack.IsInStack(addrClone.IP) {
@@ -180,9 +180,9 @@ func (udpSock *UDPSock) Connect(addr *sock.Addr) error {
 	return nil
 }
 
-func (udpSock *UDPSock) Shutdown(op int) error      { return &sock.OPUnsupported{OP: "Shutdown"} }
-func (udpSock *UDPSock) Listen() error              { return &sock.OPUnsupported{OP: "Listen"} }
-func (udpSock *UDPSock) Accept() (sock.Sock, error) { return nil, &sock.OPUnsupported{OP: "Accept"} }
+func (udpSock *UDPSock) Shutdown(op int) error      { return &sock.InvalidSockOP{OP: "Shutdown"} }
+func (udpSock *UDPSock) Listen() error              { return &sock.InvalidSockOP{OP: "Listen"} }
+func (udpSock *UDPSock) Accept() (sock.Sock, error) { return nil, &sock.InvalidSockOP{OP: "Accept"} }
 
 func (udpSock *UDPSock) GetSockName() *sock.Addr { return udpSock.Local }
 func (udpSock *UDPSock) GetPeerName() *sock.Addr { return udpSock.Peer }
