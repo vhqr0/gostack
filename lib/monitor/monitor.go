@@ -30,7 +30,7 @@ func (m *Monitor) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m *Monitor) Serve() {
-	log.Fatal(http.ListenAndServe(m.Addr, m))
+	log.Panic(http.ListenAndServe(m.Addr, m))
 }
 
 func RegistorMonitorHandler(path string, handler MonitorHandler) {

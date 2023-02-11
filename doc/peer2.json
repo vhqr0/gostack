@@ -1,0 +1,21 @@
+{
+  "Host": {
+    "Verbose": true,
+    "Forward": true,
+    "Ifaces": [
+      {
+        "Name": "eth1",
+        "MTU": 1280,
+        "MAC": "",
+        "CIDR4": "10.0.0.2/24",
+        "CIDR6": "2000::2/64",
+        "Typ": "udp",
+        "Args": { "Local": "localhost:1082", "Peer": "localhost:1081" }
+      }
+    ]
+  },
+  "Route": {
+    "AutoRoute": true,
+    "Entries": []
+  }
+}

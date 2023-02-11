@@ -162,6 +162,11 @@ func (udpSock *UDPSock) Bind(addr *sock.Addr) (*sock.Addr, error) {
 }
 
 func (udpSock *UDPSock) Connect(addr *sock.Addr) error {
+	if udpSock.Local == nil {
+		if _, err := udpSock.Bind(nil); err != nil {
+			return err
+		}
+	}
 	udpSock.Mutex.Lock()
 	defer udpSock.Mutex.Unlock()
 
