@@ -189,7 +189,8 @@ func (udpSock *UDPSock) Connect(addr *sock.Addr) error {
 	return nil
 }
 
-func (udpSock *UDPSock) Shutdown(op int) error      { return &sock.InvalidSockOP{OP: "Shutdown"} }
+func (udpSock *UDPSock) CloseRead() error           { return &sock.InvalidSockOP{OP: "CloseRead"} }
+func (udpSock *UDPSock) CloseWrite() error          { return &sock.InvalidSockOP{OP: "CloseWrite"} }
 func (udpSock *UDPSock) Listen() error              { return &sock.InvalidSockOP{OP: "Listen"} }
 func (udpSock *UDPSock) Accept() (sock.Sock, error) { return nil, &sock.InvalidSockOP{OP: "Accept"} }
 

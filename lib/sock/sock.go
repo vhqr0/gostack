@@ -9,10 +9,6 @@ const (
 	AFIP6      uint32 = 10
 	SockStream uint32 = 1
 	SockDgram  uint32 = 2
-
-	ShutR  = 0
-	ShutW  = 1
-	ShutRW = 2
 )
 
 type Sock interface {
@@ -20,7 +16,8 @@ type Sock interface {
 
 	ReadFrom([]byte) (int, *Addr, error)
 	WriteTo([]byte, *Addr) (int, error)
-	Shutdown(int) error
+	CloseRead() error
+	CloseWrite() error
 
 	Bind(*Addr) (*Addr, error)
 	Connect(*Addr) error
