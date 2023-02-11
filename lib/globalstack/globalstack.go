@@ -20,7 +20,7 @@ func InitStack(confFileName, httpListenAddr string) {
 	}
 }
 
-func Run() {
+func RunStack() {
 	Stack.Run()
 	Monitor.Run()
 }
