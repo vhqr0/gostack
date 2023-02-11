@@ -3,11 +3,9 @@ package main
 import (
 	"flag"
 	"log"
-	"net/http"
 
-	"github.com/vhqr0/gostack/lib/conf"
-	"github.com/vhqr0/gostack/lib/monitor"
 	"github.com/vhqr0/gostack/lib/sock"
+	"github.com/vhqr0/gostack/lib/globalstack"
 )
 
 var (
@@ -19,19 +17,13 @@ var (
 func main() {
 	flag.Parse()
 
-	vstack := conf.StackFromFile(*confFileName)
-	vstack.Run()
-
-	go func() {
-		m := &monitor.Monitor{Stack: vstack}
-		log.Fatal(http.ListenAndServe(*httpListenAddr, m))
-	}()
+	go globalstack.Run(*confFileName, *httpListenAddr)
 
 	addr, family, err := sock.ResolveAddr(*echoListenAddr)
 	if err != nil {
 		log.Fatal(err)
 	}
-	s, err := vstack.NewSock(family, sock.SockDgram)
+	s, err := globalstack.NewSock(family, sock.SockDgram)
 	if err != nil {
 		log.Fatal(err)
 	}

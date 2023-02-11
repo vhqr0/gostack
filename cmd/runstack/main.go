@@ -2,11 +2,8 @@ package main
 
 import (
 	"flag"
-	"log"
-	"net/http"
 
-	"github.com/vhqr0/gostack/lib/conf"
-	"github.com/vhqr0/gostack/lib/monitor"
+	"github.com/vhqr0/gostack/lib/globalstack"
 )
 
 var (
@@ -17,9 +14,5 @@ var (
 func main() {
 	flag.Parse()
 
-	vstack := conf.StackFromFile(*confFileName)
-	vstack.Run()
-
-	m := &monitor.Monitor{Stack: vstack}
-	log.Fatal(http.ListenAndServe(*httpListenAddr, m))
+	globalstack.Run(*confFileName, *httpListenAddr)
 }
