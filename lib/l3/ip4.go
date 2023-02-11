@@ -143,3 +143,17 @@ func (stack *IPStack) ip4Send(pkt *IPPkt) error {
 
 	return nil
 }
+
+func ip4DecTTL(pkt *l2.EthPkt) bool { // Notice: modify pkt
+	payload := pkt.Payload
+	ttl := payload[8]
+	if payload[0] != 0x45 || ttl == 0 {
+		return false
+	}
+	payload[8] = ttl - 1
+	binary.BigEndian.PutUint16(payload[10:12], 0)
+	// Notice: checksum only ip header
+	cksum := util.CheckSum(payload[:20])
+	binary.BigEndian.PutUint16(payload[10:12], cksum)
+	return true
+}

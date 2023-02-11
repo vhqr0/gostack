@@ -134,3 +134,13 @@ func (stack *IPStack) ip6Send(pkt *IPPkt) error {
 
 	return nil
 }
+
+func ip6DecHL(pkt *l2.EthPkt) bool { // Notice: modify pkt
+	payload := pkt.Payload
+	hl := payload[7]
+	if hl == 0 {
+		return false
+	}
+	payload[7] = hl - 1
+	return true
+}

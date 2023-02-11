@@ -1,12 +1,10 @@
 package l3
 
 import (
-	"encoding/binary"
 	"log"
 	"net"
 
 	"github.com/vhqr0/gostack/lib/l2"
-	"github.com/vhqr0/gostack/lib/util"
 )
 
 const (
@@ -72,7 +70,7 @@ func (stack *IPStack) IPSend(pkt *IPPkt) error { // Notice: block, return error,
 
 	iface := stack.EthStack.Host.Ifaces[ifidx]
 
-	if local == nil {	// local changed
+	if local == nil { // local changed
 		switch len(peer) {
 		case 4:
 			local = iface.IP4
@@ -149,15 +147,6 @@ func (stack *IPStack) ipForward(pkt *l2.EthPkt, dst net.IP) {
 		return
 	}
 
-	payload := pkt.Payload
-	ttl := payload[9]
-	if ttl == 1 {
-		if stack.Verbose {
-			log.Printf("ip forward: drop(ttl) %v via %v", dst, peer)
-		}
-		return
-	}
-
 	peerMAC := stack.Lookup(ifidx, peer)
 	if peerMAC == nil {
 		if stack.Verbose {
@@ -166,14 +155,26 @@ func (stack *IPStack) ipForward(pkt *l2.EthPkt, dst net.IP) {
 		return
 	}
 
-	// Notice: modify pkt.Payload
-	payload[9] = ttl - 1
-	binary.BigEndian.PutUint16(payload[10:12], 0)
-	cksum := util.CheckSum(payload)
-	binary.BigEndian.PutUint16(payload[10:12], cksum)
-
 	pkt.IfIdx = ifidx
 	pkt.Peer = peerMAC
+
+	switch len(peer) {
+	case 4:
+		if !ip4DecTTL(pkt) {
+			if stack.Verbose {
+				log.Printf("ip forward: drop(ttl) %v via %v", dst, peer)
+			}
+			return
+		}
+	case 16:
+		if !ip6DecHL(pkt) {
+			if stack.Verbose {
+				log.Printf("ip forward: drop(hl) %v via %v", dst, peer)
+			}
+		}
+	default:
+		log.Panic(&InvalidIPLen{Len: len(peer)})
+	}
 
 	if stack.Verbose {
 		log.Printf("ip forward: %v via %v", dst, peer)
