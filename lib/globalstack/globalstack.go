@@ -12,7 +12,7 @@ var (
 	Monitor *monitor.Monitor
 )
 
-func InitStack(confFileName, httpListenAddr string) {
+func Init(confFileName, httpListenAddr string) {
 	Stack = conf.StackFromFile(confFileName)
 	Monitor = &monitor.Monitor{
 		Stack: Stack,
@@ -20,9 +20,9 @@ func InitStack(confFileName, httpListenAddr string) {
 	}
 }
 
-func RunStack() {
+func Run() {
 	Stack.Run()
-	Monitor.Run()
+	go Monitor.Serve()
 }
 
 func NewSock(family, typ uint32) (sock.Sock, error) {

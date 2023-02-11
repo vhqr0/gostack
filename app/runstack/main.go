@@ -14,6 +14,9 @@ var (
 func main() {
 	flag.Parse()
 
-	globalstack.InitStack(*confFileName, *httpListenAddr)
-	globalstack.RunStack()
+	globalstack.Init(*confFileName, *httpListenAddr)
+	globalstack.Run()
+
+	ch := make(chan struct{})
+	<-ch
 }

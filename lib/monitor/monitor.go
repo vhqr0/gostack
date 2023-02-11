@@ -29,7 +29,7 @@ func (m *Monitor) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (m *Monitor) Run() {
+func (m *Monitor) Serve() {
 	log.Fatal(http.ListenAndServe(m.Addr, m))
 }
 
