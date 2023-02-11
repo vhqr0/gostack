@@ -1,23 +1,28 @@
 package globalstack
 
 import (
-	"log"
-	"net/http"
-
 	"github.com/vhqr0/gostack/lib/conf"
 	"github.com/vhqr0/gostack/lib/monitor"
-	"github.com/vhqr0/gostack/lib/stack"
 	"github.com/vhqr0/gostack/lib/sock"
+	"github.com/vhqr0/gostack/lib/stack"
 )
 
-var Stack *stack.Stack
+var (
+	Stack   *stack.Stack
+	Monitor *monitor.Monitor
+)
 
-func Run(confFileName string, httpListenAddr string) {
-	Stack = conf.StackFromFile(*&confFileName)
+func InitStack(confFileName, httpListenAddr string) {
+	Stack = conf.StackFromFile(confFileName)
+	Monitor = &monitor.Monitor{
+		Stack: Stack,
+		Addr:  httpListenAddr,
+	}
+}
+
+func Run() {
 	Stack.Run()
-
-	m := &monitor.Monitor{Stack: Stack}
-	log.Fatal(http.ListenAndServe(*&httpListenAddr, m))
+	Monitor.Run()
 }
 
 func NewSock(family, typ uint32) (sock.Sock, error) {

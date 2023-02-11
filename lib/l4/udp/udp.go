@@ -42,21 +42,20 @@ func (stack *UDPStack) udpReceiver() {
 			continue
 		}
 
-		sock := stack.UDPTable.Lookup(local)
-		if sock == nil {
-			if stack.Verbose {
-				log.Printf("udp recv: drop(dst) %v => %v", peer, local)
-			}
-			continue
-		}
-
 		udppkt := &UDPPkt{
 			Local:   local,
 			Peer:    peer,
 			Payload: payload[8:],
 		}
 
-		sock.udpRecv(udppkt)
+		sock := stack.SockTable.Lookup(local)
+		if sock == nil {
+			if stack.Verbose {
+				log.Printf("udp recv: drop(dst) %v => %v", peer, local)
+			}
+		} else {
+			sock.udpRecv(udppkt)
+		}
 	}
 }
 

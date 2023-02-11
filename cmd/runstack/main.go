@@ -14,5 +14,6 @@ var (
 func main() {
 	flag.Parse()
 
-	globalstack.Run(*confFileName, *httpListenAddr)
+	globalstack.InitStack(*confFileName, *httpListenAddr)
+	globalstack.Run()
 }

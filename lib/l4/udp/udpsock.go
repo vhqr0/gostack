@@ -7,8 +7,8 @@ import (
 )
 
 const (
-	UDPClosed = iota
-	UDPOpen
+	UDPOpen = iota
+	UDPClosed
 )
 
 type UDPSock struct {

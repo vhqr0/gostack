@@ -11,10 +11,12 @@ var (
 	monitorHandlerMap map[string]MonitorHandler = make(map[string]MonitorHandler)
 )
 
-type (
-	Monitor        struct{ Stack *stack.Stack }
-	MonitorHandler func(*Monitor, http.ResponseWriter, *http.Request)
-)
+type MonitorHandler func(*Monitor, http.ResponseWriter, *http.Request)
+
+type Monitor struct {
+	Stack *stack.Stack
+	Addr  string
+}
 
 func (m *Monitor) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
@@ -25,6 +27,10 @@ func (m *Monitor) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		log.Printf("monitor drop " + path)
 		w.WriteHeader(http.StatusNotFound)
 	}
+}
+
+func (m *Monitor) Run() {
+	log.Fatal(http.ListenAndServe(m.Addr, m))
 }
 
 func RegistorMonitorHandler(path string, handler MonitorHandler) {

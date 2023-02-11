@@ -17,7 +17,8 @@ var (
 func main() {
 	flag.Parse()
 
-	go globalstack.Run(*confFileName, *httpListenAddr)
+	globalstack.InitStack(*confFileName, *httpListenAddr)
+	go globalstack.Run()
 
 	addr, family, err := sock.ResolveAddr(*echoListenAddr)
 	if err != nil {

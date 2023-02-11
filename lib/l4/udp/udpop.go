@@ -87,7 +87,7 @@ func (udpSock *UDPSock) Close() error {
 	close(udpSock.recvCh)
 
 	if udpSock.Local != nil {
-		udpSock.Stack.UDPTable.Del(udpSock.Local)
+		udpSock.Stack.SockTable.Del(udpSock.Local)
 	}
 
 	udpSock.Local = nil
@@ -146,7 +146,7 @@ func (udpSock *UDPSock) Bind(addr *sock.Addr) (*sock.Addr, error) {
 		var err error
 		for i := 0; i < UDPBindMaxRetry; i++ {
 			addrClone.Port = util.RandUint16()
-			err = udpSock.Stack.UDPTable.Add(addrClone, udpSock)
+			err = udpSock.Stack.SockTable.Add(addrClone, udpSock)
 			if err == nil {
 				return addrClone, nil
 			}
@@ -154,7 +154,7 @@ func (udpSock *UDPSock) Bind(addr *sock.Addr) (*sock.Addr, error) {
 		return nil, err
 	}
 
-	if err := udpSock.Stack.UDPTable.Add(addrClone, udpSock); err != nil {
+	if err := udpSock.Stack.SockTable.Add(addrClone, udpSock); err != nil {
 		return nil, err
 	}
 

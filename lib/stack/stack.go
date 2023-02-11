@@ -5,6 +5,7 @@ import (
 	"github.com/vhqr0/gostack/lib/l2"
 	"github.com/vhqr0/gostack/lib/l3"
 	"github.com/vhqr0/gostack/lib/l4/udp"
+	"github.com/vhqr0/gostack/lib/l4/tcp"
 	"github.com/vhqr0/gostack/lib/sock"
 )
 
@@ -14,6 +15,7 @@ type Stack struct {
 	EthStack *l2.EthStack
 	IPStack  *l3.IPStack
 	UDPStack *udp.UDPStack
+	TCPStack *tcp.TCPStack
 
 	sockFactory *sock.SockFactory
 }
@@ -28,6 +30,7 @@ func (vstack *Stack) AddRoute(ver int, ifname, peerStr, netStr string) error {
 
 func (vstack *Stack) Run() {
 	vstack.UDPStack.Run()
+	vstack.TCPStack.Run()
 	vstack.IPStack.Run()
 	vstack.EthStack.Run()
 }
@@ -46,6 +49,7 @@ func NewStack(vhost *host.Host) *Stack {
 	vstack.EthStack = l2.NewEthStack(vhost)
 	vstack.IPStack = l3.NewIPStack(vstack.EthStack)
 	vstack.UDPStack = udp.NewUDPStack(vstack.IPStack, vstack.sockFactory)
+	vstack.TCPStack = tcp.NewTCPStack(vstack.IPStack, vstack.sockFactory)
 
 	return vstack
 }

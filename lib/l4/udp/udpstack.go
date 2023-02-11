@@ -10,7 +10,7 @@ type UDPStack struct {
 
 	IPStack *l3.IPStack
 
-	UDPTable *UDPTable
+	SockTable *UDPTable
 
 	recvCh chan *l3.IPPkt
 }
@@ -25,7 +25,7 @@ func NewUDPStack(ipStack *l3.IPStack, sockFactory *sock.SockFactory) *UDPStack {
 
 		IPStack: ipStack,
 
-		UDPTable: NewUDPTable(),
+		SockTable: NewUDPTable(),
 
 		recvCh: make(chan *l3.IPPkt, 1024),
 	}

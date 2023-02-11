@@ -45,7 +45,7 @@ func marshalUDPTable(table *udp.UDPTable) ([]byte, error) {
 }
 
 func handleUDP(m *Monitor, w http.ResponseWriter, r *http.Request) {
-	if buf, err := marshalUDPTable(m.Stack.UDPStack.UDPTable); err != nil {
+	if buf, err := marshalUDPTable(m.Stack.UDPStack.SockTable); err != nil {
 		log.Printf("monitor/udp error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
